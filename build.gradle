@@ -3,7 +3,7 @@ apply plugin: 'application'
 
 version = '1.0.2'
 
-mainClassName = "io.sdkman.DbMigration"
+mainClassName = "io.sdkman.DbCleanup"
 
 repositories {
   jcenter()
