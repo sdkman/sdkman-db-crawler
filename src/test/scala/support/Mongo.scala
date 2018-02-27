@@ -20,7 +20,7 @@ object Mongo {
 
   lazy val versionsCollection = db.getCollection("versions")
 
-  def insertVersions(vs: Seq[Version]) = vs.foreach(insertVersion)
+  def insertVersions(vs: Version*) = vs.foreach(insertVersion)
 
   def insertVersion(v: Version) =
     versionsCollection.insertOne(

@@ -15,5 +15,8 @@ dependencies {
   compile 'org.mongodb.scala:mongo-scala-driver_2.12:2.2.0'
   testCompile 'junit:junit:4.5'
   testCompile 'org.scalatest:scalatest_2.12:3.0.5'
+  testCompile 'com.github.tomakehurst:wiremock:2.2.2'
+  compile 'com.icegreen:greenmail:1.5.7'
+  compile 'javax.mail:mail:1.4'
   runtime 'org.slf4j:slf4j-simple:1.7.25'
 }
