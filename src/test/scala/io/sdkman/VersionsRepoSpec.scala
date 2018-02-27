@@ -9,11 +9,9 @@ import support.Mongo
 @RunWith(classOf[JUnitRunner])
 class VersionsRepoSpec extends WordSpec with Matchers with BeforeAndAfter with ScalaFutures with OptionValues {
 
-  val repo = new VersionsRepo()
-
   "versions repository" should {
 
-    "find all versions ordered by candidate, version, platform" in {
+    "find all versions ordered by candidate, version, platform" in new VersionsRepo {
       val java8u111 = Version("java", "8u111", "LINUX_64", "http://dl/8u111-b14/jdk-8u111-linux-x64.tar.gz")
       val java8u121 = Version("java", "8u121", "LINUX_64", "http://dl/8u121-b14/jdk-8u121-linux-x64.tar.gz")
       val java8u131 = Version("java", "8u131", "LINUX_64", "http://dl/8u131-b14/jdk-8u131-linux-x64.tar.gz")
@@ -25,7 +23,7 @@ class VersionsRepoSpec extends WordSpec with Matchers with BeforeAndAfter with S
 
       candidateVersions.foreach(Mongo.insertVersion)
 
-      whenReady(repo.findAllVersions()) { versions =>
+      whenReady(findAllVersions()) { versions =>
         versions.size shouldBe 6
         versions(0) shouldBe java8u111
         versions(1) shouldBe java8u121

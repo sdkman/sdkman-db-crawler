@@ -5,7 +5,7 @@ import javax.mail.internet.{InternetAddress, MimeMessage}
 
 import com.icegreen.greenmail.util.{GreenMail, ServerSetupTest}
 
-object DbCleanup extends App {
+object DbCleanup extends App with VersionsRepo {
 
   lazy val greenMail = new GreenMail(ServerSetupTest.SMTP_IMAP)
 
