@@ -1,26 +1,21 @@
 package io.sdkman
 
-import java.net.InetAddress
-import javax.mail.Address
+import javax.mail.Message
 
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
+import org.jvnet.mock_javamail.Mailbox
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.{BeforeAndAfter, Matchers, OptionValues, WordSpec}
+import support.Mongo
 import support.Mongo.insertVersions
-import support.{MailSupport, Mongo}
 
-class VersionCleanupAccSpec extends WordSpec with Matchers with BeforeAndAfter with Eventually with IntegrationPatience with MailSupport with OptionValues {
-
-  override val email = "user@localhost.com"
-
-  override val user = "user"
-
-  override val password = "password"
-
-  override lazy val greenMail = DbCleanup.greenMail
-
-  override lazy val greenMailUser = DbCleanup.greenMailUser
+class VersionCleanupAccSpec extends WordSpec
+  with Matchers
+  with BeforeAndAfter
+  with Eventually
+  with IntegrationPatience
+  with OptionValues {
 
   WireMock.configureFor("localhost", 8080)
 
@@ -32,7 +27,8 @@ class VersionCleanupAccSpec extends WordSpec with Matchers with BeforeAndAfter w
   "application" should {
     "notify of all versions with defunct urls by email" in {
 
-      val fromEmail = "dbcleanup@example.org"
+      val fromEmail = "from@localhost.com"
+      val toEmail = "to@localhost.com"
       val subject = "Invalid URLs"
 
       val validUrl = "http://localhost:8080/candidates/scala/2.12.4"
@@ -53,7 +49,8 @@ class VersionCleanupAccSpec extends WordSpec with Matchers with BeforeAndAfter w
       DbCleanup.main(Array[String]())
 
       eventually {
-        val message = receiveMessage().value
+        messageCountFor(toEmail) shouldBe 1
+        val message = receivedMessage(toEmail)
         message.getFrom.toList.headOption.value.toString shouldBe fromEmail
         message.getSubject shouldBe subject
         message.getContent.asInstanceOf[String] should include(invalidUrl)
@@ -62,6 +59,8 @@ class VersionCleanupAccSpec extends WordSpec with Matchers with BeforeAndAfter w
     }
   }
 
-  def extractEmail(addresses: Array[Address]): String = new String(addresses.toList.head.asInstanceOf[InetAddress].getAddress)
+  def messageCountFor(ownerEmail: String): Int = Mailbox.get(ownerEmail).size()
+
+  def receivedMessage(ownerEmail: String): Message = Mailbox.get(ownerEmail).get(0)
 
 }

@@ -1,23 +1,10 @@
 package io.sdkman
 
 import com.mongodb.ConnectionString
-import com.typesafe.config.ConfigFactory
 import org.mongodb.scala._
 import org.mongodb.scala.connection.ClusterSettings
 
-trait MongoConnection {
-
-  lazy val config = ConfigFactory.load()
-
-  lazy val mongoHost = config.getString("mongo.host")
-
-  lazy val mongoPort = config.getInt("mongo.port")
-
-  lazy val mongoDatabase = config.getString("mongo.database")
-
-  lazy val mongoUsername = config.getString("mongo.username")
-
-  lazy val mongoPassword = config.getString("mongo.password")
+trait MongoConnection extends Configuration {
 
   def credential = MongoCredential.createCredential(mongoUsername, mongoDatabase, mongoPassword.toCharArray)
 
