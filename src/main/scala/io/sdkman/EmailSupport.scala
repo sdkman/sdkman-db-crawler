@@ -21,7 +21,7 @@ trait EmailSupport extends LazyLogging with Configuration {
       .subject(s"Invalid URLs")
       .content(Text(compose(urls)))).onComplete {
       case Success(x) =>
-        logger.info(s"Notification sent: $smtpEmail")
+        logger.info(s"Notification sent: $smtpEmail: $urls")
       case Failure(e) =>
         logger.error(s"Failed to send notification: $smtpEmail: ${e.getMessage}")
     }
