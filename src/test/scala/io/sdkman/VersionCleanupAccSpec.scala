@@ -1,23 +1,26 @@
 package io.sdkman
 
-import javax.mail.Message
-
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock._
-import org.jvnet.mock_javamail.Mailbox
+import org.junit.runner.RunWith
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.{BeforeAndAfter, Matchers, OptionValues, WordSpec}
-import support.Mongo
+import support.{EmailSupport, Mongo}
 import support.Mongo.insertVersions
 
+@RunWith(classOf[JUnitRunner])
 class VersionCleanupAccSpec extends WordSpec
   with Matchers
   with BeforeAndAfter
   with Eventually
   with IntegrationPatience
-  with OptionValues {
+  with OptionValues
+  with EmailSupport{
 
-  WireMock.configureFor("localhost", 8080)
+  WireMock.configureFor("wiremock", 8080)
+
+  val toEmail = "to@localhost.com"
 
   before {
     Mongo.dropAllCollections()
@@ -25,10 +28,13 @@ class VersionCleanupAccSpec extends WordSpec
   }
 
   "application" should {
-    "notify of all versions with defunct urls by email" in {
+    "notify of all versions with defunct urls by email" in new DbCleanup {
 
       val fromEmail = "from@localhost.com"
-      val toEmail = "to@localhost.com"
+      val toEmail = randomEmail()
+
+      override lazy val smtpToEmail = toEmail
+
       val subject = "Invalid URLs"
 
       val validUrl = "http://localhost:8080/candidates/scala/2.12.4"
@@ -46,21 +52,18 @@ class VersionCleanupAccSpec extends WordSpec
         .willReturn(aResponse()
           .withStatus(404)))
 
-      DbCleanup.main(Array[String]())
+      start()
 
       eventually {
-        messageCountFor(toEmail) shouldBe 1
-        val message = receivedMessage(toEmail)
+        val messages = readMessages(toEmail)
+        messages.size shouldBe 1
+        val message = messages.head
         message.getFrom.toList.headOption.value.toString shouldBe fromEmail
         message.getSubject shouldBe subject
-        message.getContent.asInstanceOf[String] should include(invalidUrl)
-        message.getContent.asInstanceOf[String] shouldNot include(validUrl)
+        val content = message.getContent.asInstanceOf[String]
+        content should include(invalidUrl)
+        content shouldNot include(validUrl)
       }
     }
   }
-
-  def messageCountFor(ownerEmail: String): Int = Mailbox.get(ownerEmail).size()
-
-  def receivedMessage(ownerEmail: String): Message = Mailbox.get(ownerEmail).get(0)
-
 }

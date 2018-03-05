@@ -1,8 +1,15 @@
 package io.sdkman
 
-object DbCleanup extends App with VersionsRepo with EmailSupport {
+trait DbCleanup extends VersionsRepo with EmailConnector {
 
-  send(Seq("http://localhost:8080/candidates/scala/2.9.0"), "to@localhost.com")
+  def start() = {
 
-  println("Done cleaning up.")
+    send(Seq("http://localhost:8080/candidates/scala/2.9.0"), smtpToEmail)
+
+    println("Done cleaning up.")
+  }
+}
+
+object DbCleanup extends DbCleanup {
+  start()
 }

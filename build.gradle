@@ -18,6 +18,5 @@ dependencies {
   testCompile 'junit:junit:4.5'
   testCompile 'org.scalatest:scalatest_2.12:3.0.5'
   testCompile 'com.github.tomakehurst:wiremock:2.2.2'
-  testCompile 'org.jvnet.mock-javamail:mock-javamail:1.9'
   runtime 'org.slf4j:slf4j-simple:1.7.25'
 }

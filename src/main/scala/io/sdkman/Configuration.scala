@@ -20,7 +20,9 @@ trait Configuration {
 
   lazy val smtpPort = config.getInt("smtp.port")
 
-  lazy val smtpEmail = config.getString("smtp.email")
+  lazy val smtpFromEmail = config.getString("smtp.email.from")
+
+  lazy val smtpToEmail = config.getString("smtp.email.to")
 
   lazy val smtpUser = config.getString("smtp.user")
 
