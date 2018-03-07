@@ -5,7 +5,7 @@ import scala.concurrent.duration._
 import scalaj.http.Http
 import languageFeature.postfixOps
 
-class DbCleanup extends VersionsRepo with EmailConnector {
+class Main extends VersionsRepo with EmailConnector {
 
   def start() = {
 
@@ -20,6 +20,6 @@ class DbCleanup extends VersionsRepo with EmailConnector {
   private def hasOrphanedUrl(version: Version): Boolean = Http(version.url).method("HEAD").asString.code != 200
 }
 
-object DbCleanup extends DbCleanup with App {
+object Main extends Main with App {
   start()
 }

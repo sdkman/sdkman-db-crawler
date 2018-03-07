@@ -29,7 +29,7 @@ class VersionCleanupAccSpec extends WordSpec
   }
 
   "application" should {
-    "notify of all versions with defunct urls by email" in new DbCleanup {
+    "notify of all versions with defunct urls by email" in new Main {
 
       val fromEmail = "from@localhost.com"
       val toEmail = randomEmail()
