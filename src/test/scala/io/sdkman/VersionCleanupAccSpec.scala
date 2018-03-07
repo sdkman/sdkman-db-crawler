@@ -16,7 +16,7 @@ class VersionCleanupAccSpec extends WordSpec
   with Eventually
   with IntegrationPatience
   with OptionValues
-  with EmailSupport{
+  with EmailSupport {
 
   WireMock.configureFor("wiremock", 8080)
 
