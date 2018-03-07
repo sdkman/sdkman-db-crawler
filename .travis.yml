@@ -1,10 +1,11 @@
 services:
   - docker
-before_script:
-  - docker run --rm -d --network=host --name mongo mongo:3.2
-  - ./wait-for-it.sh -h mongo -p 27017 -t 5 -- mongo --host localhost --port 27017 --eval 'db.version()'
+
 script:
-  - ./gradlew clean test run
+  - ./compose run --rm db_cleanup
+cache:
+  directories:
+  - "$HOME/.gradle"
 branches:
   only:
     - master

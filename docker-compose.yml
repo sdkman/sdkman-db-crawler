@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+
+  mongo-init:
+    container_name: mongo-init
+    image: mongo:3.2
+    depends_on:
+      - mongo
+    volumes:
+      - $PWD/wait-for-it.sh:/wait-for-it.sh
+    command: bash -c "/wait-for-it.sh -h mongo -p 27017 -t 30 -- mongo --host mongo --port 27017 --eval 'db.version()'"
+
+  mongo:
+    container_name: mongo
+    image: mongo:3.2
+    ports:
+      - "27017:27017"
+
+  greenmail:
+    container_name: greenmail
+    image: greenmail/standalone:1.5.7
+    ports:
+      - "3025:3025"
+      - "3143:3143"
+
+  wiremock:
+    container_name: wiremock
+    image: rodolpheche/wiremock:latest
+    ports:
+      - "8080:8080"
+
+  db_cleanup:
+    image: java:8
+    working_dir: /work
+    user: ${USER_ID}
+    volumes:
+      - ${PWD}:/work
+      - ${HOME}/.gradle:/root/.gradle
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/bin/docker
+    depends_on:
+      - wiremock
+      - greenmail
+      - mongo-init
+    command: ./gradlew run
+
