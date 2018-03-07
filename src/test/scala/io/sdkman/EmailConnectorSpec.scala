@@ -4,10 +4,16 @@ import org.junit.runner.RunWith
 import org.scalatest.concurrent.Eventually
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{Matchers, OptionValues, WordSpec}
-import support.EmailSupport
+import support.{EmailSupport, TestNetworking}
 
 @RunWith(classOf[JUnitRunner])
-class EmailConnectorSpec extends WordSpec with Matchers with Eventually with OptionValues with EmailSupport {
+class EmailConnectorSpec extends WordSpec
+  with Matchers
+  with Eventually
+  with OptionValues
+  with EmailSupport
+  with TestNetworking {
+
   "email connector" should {
     "send an email" in new EmailConnector {
       val fromEmail = "from@localhost.com"

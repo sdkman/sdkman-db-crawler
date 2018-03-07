@@ -4,10 +4,16 @@ import org.junit.runner.RunWith
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{BeforeAndAfter, Matchers, OptionValues, WordSpec}
-import support.Mongo
+import support.{MongoSupport, TestNetworking}
 
 @RunWith(classOf[JUnitRunner])
-class VersionsRepoSpec extends WordSpec with Matchers with BeforeAndAfter with ScalaFutures with OptionValues {
+class VersionsRepoSpec extends WordSpec
+  with Matchers
+  with BeforeAndAfter
+  with ScalaFutures
+  with OptionValues
+  with MongoSupport
+  with TestNetworking {
 
   "versions repository" should {
 
@@ -21,7 +27,7 @@ class VersionsRepoSpec extends WordSpec with Matchers with BeforeAndAfter with S
 
       val candidateVersions = Seq(java8u131, scala212_win, java8u111, scala212_lnx, java8u121, scala212_osx)
 
-      candidateVersions.foreach(Mongo.insertVersion)
+      candidateVersions.foreach(insertVersion)
 
       whenReady(findAllVersions()) { versions =>
         versions.size shouldBe 6
@@ -36,6 +42,6 @@ class VersionsRepoSpec extends WordSpec with Matchers with BeforeAndAfter with S
   }
 
   before {
-    Mongo.dropAllCollections()
+    dropAllCollections()
   }
 }

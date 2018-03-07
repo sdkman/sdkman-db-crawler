@@ -30,7 +30,8 @@ services:
     ports:
       - "8080:8080"
 
-  db_cleanup:
+  db_cleanup_tests:
+    container_name: db_cleanup_tests
     image: java:8
     working_dir: /work
     user: ${USER_ID}
@@ -43,5 +44,4 @@ services:
       - wiremock
       - greenmail
       - mongo-init
-    command: ./gradlew run
-
+    command: ./gradlew clean check

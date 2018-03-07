@@ -10,11 +10,15 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import org.mongodb.scala.ScalaObservable
 
-object Mongo {
+trait MongoSupport {
 
   import Helpers._
 
-  lazy val mongoClient = MongoClient("mongodb://mongodb:27017")
+  val MongoHost: String
+
+  val MongoPort: Int
+
+  lazy val mongoClient = MongoClient(s"mongodb://$MongoHost:$MongoPort")
 
   lazy val db = mongoClient.getDatabase("sdkman")
 

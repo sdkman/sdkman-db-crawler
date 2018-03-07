@@ -6,8 +6,7 @@ import org.junit.runner.RunWith
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{BeforeAndAfter, Matchers, OptionValues, WordSpec}
-import support.{EmailSupport, Mongo}
-import support.Mongo.insertVersions
+import support.{EmailSupport, MongoSupport, TestNetworking}
 
 @RunWith(classOf[JUnitRunner])
 class VersionCleanupAccSpec extends WordSpec
@@ -16,14 +15,16 @@ class VersionCleanupAccSpec extends WordSpec
   with Eventually
   with IntegrationPatience
   with OptionValues
-  with EmailSupport {
+  with EmailSupport
+  with MongoSupport
+  with TestNetworking {
 
-  WireMock.configureFor("wiremock", 8080)
+  WireMock.configureFor(WiremockHost, WiremockPort)
 
   val toEmail = "to@localhost.com"
 
   before {
-    Mongo.dropAllCollections()
+    dropAllCollections()
     WireMock.reset()
   }
 
@@ -37,8 +38,8 @@ class VersionCleanupAccSpec extends WordSpec
 
       val subject = "Invalid URLs"
 
-      val validUrl = "http://localhost:8080/candidates/scala/2.12.4"
-      val invalidUrl = "http://localhost:8080/candidates/scala/2.9.0"
+      val validUrl = s"http://$WiremockHost:$WiremockPort/candidates/scala/2.12.4"
+      val invalidUrl = s"http://$WiremockHost:$WiremockPort/candidates/scala/2.9.0"
 
       val validVersion = Version("scala", "2.12.4", "UNIVERSAL", validUrl)
       val defunctVersion = Version("scala", "2.9.0", "UNIVERSAL", invalidUrl)

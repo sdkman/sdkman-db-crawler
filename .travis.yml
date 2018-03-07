@@ -2,7 +2,7 @@ services:
   - docker
 
 script:
-  - ./compose run --rm db_cleanup
+  - ./compose run --rm db_cleanup_tests
 cache:
   directories:
   - "$HOME/.gradle"

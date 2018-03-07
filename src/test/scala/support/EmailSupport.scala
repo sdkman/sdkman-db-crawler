@@ -7,9 +7,9 @@ import scala.util.Random
 
 trait EmailSupport {
 
-  val Host = "localhost"
+  val GreenmailHost: String
 
-  val Port = 3143
+  val GreenmailPort: Int
 
   val props = new Properties()
   props.setProperty("mail.store.protocol", "imap")
@@ -20,7 +20,7 @@ trait EmailSupport {
   lazy val store = session.getStore("imap")
 
   def readMessages(email: String): List[Message] = {
-    store.connect(Host, Port, email, "")
+    store.connect(GreenmailHost, GreenmailPort, email, "")
 
     val inbox = store.getFolder("Inbox")
     inbox.open(Folder.READ_ONLY)
