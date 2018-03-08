@@ -53,7 +53,7 @@ class VersionCleanupAccSpec extends WordSpec
         .willReturn(aResponse()
           .withStatus(404)))
 
-      start()
+      run()
 
       eventually {
         val messages = readMessages(toEmail)

@@ -1,13 +1,15 @@
 package io.sdkman
 
+import java.lang.Thread.sleep
+
 import scala.concurrent.Await
 import scala.concurrent.duration._
+import scala.language.postfixOps
 import scalaj.http.Http
-import languageFeature.postfixOps
 
 class Main extends VersionsRepo with EmailConnector {
 
-  def start() = {
+  def run(): Unit = {
 
     send(
       Await.result(findAllVersions(), 10 seconds)
@@ -21,5 +23,12 @@ class Main extends VersionsRepo with EmailConnector {
 }
 
 object Main extends Main with App {
-  start()
+
+  import monix.execution.Scheduler.{global => scheduler}
+
+  scheduler.scheduleAtFixedRate(1 minute, 24 hours) {
+    run()
+  }
+
+  while(true) sleep(1000)
 }
