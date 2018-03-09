@@ -13,12 +13,9 @@ class Main extends VersionsRepo with EmailConnector with MongoConnection with Co
 
   def run(): Unit = {
 
-    send(
-      Await.result(findAllVersions(), 10 seconds)
-        .filter(hasOrphanedUrl).map(_.url),
-      smtpToEmail)
+    send(Await.result(findAllVersions(), 10 seconds).filter(hasOrphanedUrl).map(_.url), smtpToEmail)
 
-    println("Finished working...")
+    logger.info("Completed scheduled email job...")
   }
 
   private def hasOrphanedUrl(version: Version): Boolean = Http(version.url).method("HEAD").asString.code != 200
@@ -29,6 +26,7 @@ object Main extends Main with App {
   import monix.execution.Scheduler.{global => scheduler}
 
   scheduler.scheduleAtFixedRate(1 minute, 24 hours) {
+    logger.info("Running scheduled email job...")
     run()
   }
 
