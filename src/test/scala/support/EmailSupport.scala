@@ -17,14 +17,23 @@ trait EmailSupport {
 
   lazy val session = Session.getDefaultInstance(props, null)
 
-  lazy val store = session.getStore("imap")
-
-  def readMessages(email: String): List[Message] = {
+  private def openStore(email: String) = {
+    val store = session.getStore("imap")
     store.connect(GreenmailHost, GreenmailPort, email, "")
+    store
+  }
 
+  private def closeStore(store: Store) = store.close()
+
+  def withStore(email: String)(fun: Store => Unit): Unit = {
+    val store = openStore(email)
+    fun(store)
+    closeStore(store)
+  }
+
+  def readMessages(store: Store): List[Message] = {
     val inbox = store.getFolder("Inbox")
     inbox.open(Folder.READ_ONLY)
-
     inbox.getMessages.toList
   }
 

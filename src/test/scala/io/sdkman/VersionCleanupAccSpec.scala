@@ -55,15 +55,17 @@ class VersionCleanupAccSpec extends WordSpec
 
       run()
 
-      eventually {
-        val messages = readMessages(toEmail)
-        messages.size shouldBe 1
-        val message = messages.head
-        message.getFrom.toList.headOption.value.toString shouldBe fromEmail
-        message.getSubject shouldBe subject
-        val content = message.getContent.asInstanceOf[String]
-        content should include(invalidUrl)
-        content shouldNot include(validUrl)
+      withStore(toEmail) { store =>
+        eventually {
+          val messages = readMessages(store)
+          messages.size shouldBe 1
+          val message = messages.head
+          message.getFrom.toList.headOption.value.toString shouldBe fromEmail
+          message.getSubject shouldBe subject
+          val content = message.getContent.asInstanceOf[String]
+          content should include(invalidUrl)
+          content shouldNot include(validUrl)
+        }
       }
     }
   }

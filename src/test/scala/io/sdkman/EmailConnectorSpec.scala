@@ -16,27 +16,54 @@ class EmailConnectorSpec extends WordSpec
   with TestNetworking {
 
   "email connector" should {
-    "send an email" in new EmailConnectorUnderTest {
+
+    "send email if invalid url(s) are found" in new TestEmailConnector {
       val fromEmail = "from@localhost.com"
-      override lazy val smtpToEmail = randomEmail()
-      val toEmail = smtpToEmail
+      val toEmail = randomEmail()
       val subject = "Invalid URLs"
-      val content = "content text"
+      val url = "url text"
 
-      send(Seq(content), toEmail)
+      send(Seq(url), toEmail)
 
-      eventually {
-        val messages = readMessages(toEmail)
-        messages.size shouldBe 1
-        val message = messages.head
-        message.getFrom.toList.headOption.value.toString shouldBe fromEmail
-        message.getSubject shouldBe subject
-        val content = message.getContent.asInstanceOf[String]
-        content should include("The following URLs are invalid and marked for deletion")
-        content should include(content)
+      withStore(toEmail) { store =>
+        eventually {
+          val messages = readMessages(store)
+          messages.size shouldBe 1
+          val message = messages.head
+          message.getFrom.toList.headOption.value.toString shouldBe fromEmail
+          message.getSubject shouldBe subject
+          val content = message.getContent.asInstanceOf[String]
+          content should include("The following URLs are invalid and marked for deletion")
+          content should include(content)
+        }
+      }
+    }
+
+    "not send email if no versions are found" in new TestEmailConnector {
+      val fromEmail = "from@localhost.com"
+      val toEmail = randomEmail()
+      val subject = "Invalid URLs"
+      val url = "url text"
+
+      //doing two calls will not bump up the message count to 2
+      send(Seq(), toEmail)
+      send(Seq(url), toEmail)
+
+      withStore(toEmail) { store =>
+        eventually {
+          val messages = readMessages(store)
+          messages.size shouldBe 1
+          val message = messages.head
+          message.getFrom.toList.headOption.value.toString shouldBe fromEmail
+          message.getSubject shouldBe subject
+          val content = message.getContent.asInstanceOf[String]
+          content should include("The following URLs are invalid and marked for deletion")
+          content should include(content)
+        }
       }
     }
   }
 
-  sealed trait EmailConnectorUnderTest extends EmailConnector with LazyLogging with Configuration
+  sealed trait TestEmailConnector extends EmailConnector with LazyLogging with Configuration
+
 }
