@@ -5,7 +5,9 @@ import org.mongodb.scala.model.Sorts.ascending
 
 import scala.concurrent.Future
 
-trait VersionsRepo extends MongoConnection {
+trait VersionsRepo {
+
+  self: MongoConnection =>
 
   def findAllVersions(): Future[Seq[Version]] =
     versionsCollection

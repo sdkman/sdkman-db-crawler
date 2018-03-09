@@ -1,5 +1,6 @@
 package io.sdkman
 
+import com.typesafe.scalalogging.LazyLogging
 import org.junit.runner.RunWith
 import org.scalatest.concurrent.Eventually
 import org.scalatest.junit.JUnitRunner
@@ -15,7 +16,7 @@ class EmailConnectorSpec extends WordSpec
   with TestNetworking {
 
   "email connector" should {
-    "send an email" in new EmailConnector {
+    "send an email" in new EmailConnectorUnderTest {
       val fromEmail = "from@localhost.com"
       override lazy val smtpToEmail = randomEmail()
       val toEmail = smtpToEmail
@@ -36,4 +37,6 @@ class EmailConnectorSpec extends WordSpec
       }
     }
   }
+
+  sealed trait EmailConnectorUnderTest extends EmailConnector with LazyLogging with Configuration
 }

@@ -2,12 +2,14 @@ package io.sdkman
 
 import java.lang.Thread.sleep
 
+import com.typesafe.scalalogging.LazyLogging
+
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
 import scalaj.http.Http
 
-class Main extends VersionsRepo with EmailConnector {
+class Main extends VersionsRepo with EmailConnector with MongoConnection with Configuration with LazyLogging {
 
   def run(): Unit = {
 
@@ -30,5 +32,5 @@ object Main extends Main with App {
     run()
   }
 
-  while(true) sleep(1000)
+  while (true) sleep(1000)
 }

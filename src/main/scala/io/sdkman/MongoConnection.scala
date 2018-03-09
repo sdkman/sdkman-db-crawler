@@ -4,7 +4,9 @@ import com.mongodb.ConnectionString
 import org.mongodb.scala._
 import org.mongodb.scala.connection.ClusterSettings
 
-trait MongoConnection extends Configuration {
+trait MongoConnection {
+
+  self: Configuration =>
 
   def credential = MongoCredential.createCredential(mongoUsername, mongoDatabase, mongoPassword.toCharArray)
 

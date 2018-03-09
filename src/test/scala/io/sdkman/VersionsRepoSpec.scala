@@ -15,9 +15,13 @@ class VersionsRepoSpec extends WordSpec
   with MongoSupport
   with TestNetworking {
 
+  before {
+    dropAllCollections()
+  }
+
   "versions repository" should {
 
-    "find all versions ordered by candidate, version, platform" in new VersionsRepo {
+    "find all versions ordered by candidate, version, platform" in new VersionRepoUnderTest {
       val java8u111 = Version("java", "8u111", "LINUX_64", "http://dl/8u111-b14/jdk-8u111-linux-x64.tar.gz")
       val java8u121 = Version("java", "8u121", "LINUX_64", "http://dl/8u121-b14/jdk-8u121-linux-x64.tar.gz")
       val java8u131 = Version("java", "8u131", "LINUX_64", "http://dl/8u131-b14/jdk-8u131-linux-x64.tar.gz")
@@ -41,7 +45,5 @@ class VersionsRepoSpec extends WordSpec
     }
   }
 
-  before {
-    dropAllCollections()
-  }
+  sealed trait VersionRepoUnderTest extends VersionsRepo with MongoConnection with Configuration
 }
