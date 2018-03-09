@@ -7,7 +7,7 @@ import org.scalatest.{BeforeAndAfter, Matchers, OptionValues, WordSpec}
 import support.{MongoSupport, TestNetworking}
 
 @RunWith(classOf[JUnitRunner])
-class VersionsRepoSpec extends WordSpec
+class VersionsRepoISpec extends WordSpec
   with Matchers
   with BeforeAndAfter
   with ScalaFutures
