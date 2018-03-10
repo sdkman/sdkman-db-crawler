@@ -23,12 +23,16 @@ class Main extends VersionsRepo with EmailConnector with MongoConnection with Co
 
 object Main extends Main with App {
 
+  logger.info("Starting sdkman-db-cleanup...")
+
   import monix.execution.Scheduler.{global => scheduler}
 
+  logger.info("Starting up scheduler...")
   scheduler.scheduleAtFixedRate(1 minute, 24 hours) {
     logger.info("Running scheduled email job...")
     run()
   }
 
+  logger.info("Successfully started sdkman-db-cleanup...")
   while (true) sleep(1000)
 }
