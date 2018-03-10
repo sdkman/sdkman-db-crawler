@@ -36,7 +36,6 @@ services:
     environment:
       - TERM=dumb
     working_dir: /work
-    user: root
     volumes:
       - ${PWD}:/work
       - ${HOME}/.gradle:/root/.gradle

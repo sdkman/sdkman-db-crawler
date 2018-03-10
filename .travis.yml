@@ -1,11 +1,13 @@
+sudo: required
+
 services:
   - docker
-
 env:
   - TERM=dump
-
 script:
   - ./compose run --rm db_cleanup_tests
+after_script:
+  - chown -R ${USER}:${USER} build
 cache:
   directories:
   - "$HOME/.gradle"
