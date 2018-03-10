@@ -30,8 +30,8 @@ services:
     ports:
       - "8080:8080"
 
-  db_cleanup_tests:
-    container_name: db_cleanup_tests
+  gradle:
+    container_name: gradle
     image: java:8
     environment:
       - TERM=dumb
@@ -45,4 +45,4 @@ services:
       - wiremock
       - greenmail
       - mongo-init
-    command: ./gradlew clean check
+    entrypoint: ['./gradlew']
