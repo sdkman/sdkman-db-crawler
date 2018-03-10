@@ -3,8 +3,8 @@ services:
 env:
   - TERM=dump
 script:
-  - ./compose run --rm gradle clean check
-  - ./compose run --rm gradle shadowJar
+  - ./docker/compose run --rm gradle clean check
+  - ./docker/compose run --rm gradle shadowJar
 cache:
   directories:
   - "$HOME/.gradle"
