@@ -1,6 +1,9 @@
 services:
   - docker
 
+env:
+  - TERM=dump
+
 script:
   - ./compose run --rm db_cleanup_tests
 cache:

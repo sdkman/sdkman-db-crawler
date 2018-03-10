@@ -33,8 +33,10 @@ services:
   db_cleanup_tests:
     container_name: db_cleanup_tests
     image: java:8
+    environment:
+      - TERM=dumb
     working_dir: /work
-    user: ${USER_ID}
+    user: root
     volumes:
       - ${PWD}:/work
       - ${HOME}/.gradle:/root/.gradle
