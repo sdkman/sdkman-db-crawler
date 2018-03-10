@@ -4,7 +4,7 @@ env:
   - TERM=dump
 script:
   - ./docker/compose run --rm gradle clean check
-  - ./docker/compose run --rm gradle shadowJar
+  - ./docker/compose run --rm gradle docker
 cache:
   directories:
   - "$HOME/.gradle"

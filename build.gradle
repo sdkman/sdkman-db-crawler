@@ -1,10 +1,12 @@
 plugins {
   id "com.github.johnrengelman.plugin-shadow" version "2.0.2"
+  id "com.palantir.docker" version "0.19.2"
 }
 
+apply plugin: "scala"
 apply plugin: "com.github.johnrengelman.plugin-shadow"
 apply plugin: "application"
-apply plugin: "scala"
+apply plugin: "com.palantir.docker"
 
 version = '0.0.1'
 
@@ -12,10 +14,6 @@ mainClassName = "io.sdkman.Main"
 
 repositories {
     jcenter()
-}
-
-shadowJar {
-    relocate 'buildinfo', 'buildinfo'
 }
 
 dependencies {
@@ -30,4 +28,16 @@ dependencies {
     testCompile 'org.scalatest:scalatest_2.12:3.0.5'
     testCompile 'com.github.tomakehurst:wiremock:2.2.2'
     runtime 'org.slf4j:slf4j-simple:1.7.25'
+}
+
+shadowJar {
+    relocate 'buildinfo', 'buildinfo'
+}
+
+docker {
+    name "sdkman/sdkman-db-cleanup"
+    tags "$version", "latest"
+    dockerfile file('docker/Dockerfile')
+    files tasks.shadowJar.outputs
+    dependsOn shadowJar
 }
