@@ -1,12 +1,21 @@
-apply plugin: 'scala'
-apply plugin: 'application'
+plugins {
+  id "com.github.johnrengelman.plugin-shadow" version "2.0.2"
+}
 
-version = '1.0.2'
+apply plugin: "com.github.johnrengelman.plugin-shadow"
+apply plugin: "application"
+apply plugin: "scala"
+
+version = '0.0.1'
 
 mainClassName = "io.sdkman.Main"
 
 repositories {
     jcenter()
+}
+
+shadowJar {
+    relocate 'buildinfo', 'buildinfo'
 }
 
 dependencies {
