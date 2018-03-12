@@ -3,7 +3,7 @@ services:
 env:
   - TERM=dump
 script:
-  - ./docker/compose run --rm gradle clean docker
+  - ./docker/compose run --rm gradle clean final docker
 cache:
   directories:
   - "$HOME/.gradle"
