@@ -3,7 +3,8 @@ services:
 env:
   - TERM=dump
 script:
-  - ./docker/compose run --rm gradle clean final docker
+  - ls -lah "${HOME}/.ssh"
+  - ./docker/compose run --rm gradle --stacktrace clean check final docker dockerTag dockerPush
 cache:
   directories:
   - "$HOME/.gradle"

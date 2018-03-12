@@ -9,8 +9,6 @@ apply plugin: "com.github.johnrengelman.plugin-shadow"
 apply plugin: "application"
 apply plugin: "com.palantir.docker"
 
-version = '0.0.1'
-
 mainClassName = "io.sdkman.Main"
 
 repositories {
@@ -38,7 +36,7 @@ shadowJar {
 
 docker {
     name "sdkman/sdkman-db-cleanup"
-    tags "$version", "latest"
+    tags version as String, 'latest'
     dockerfile file('docker/Dockerfile')
     files tasks.shadowJar.outputs
     dependsOn shadowJar
