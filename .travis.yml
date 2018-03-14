@@ -5,6 +5,8 @@ env:
 script:
   - docker-compose -f docker/docker-compose.yml up -d greenmail wiremock mongo-init
   - ./gradlew --stacktrace clean check docker dockerTag dockerPush
+after_script:
+  - docker-compose -f docker/docker-compose.yml down
 cache:
   directories:
   - "$HOME/.gradle"
