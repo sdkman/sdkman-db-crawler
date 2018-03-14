@@ -2,7 +2,7 @@ package io.sdkman
 
 import com.typesafe.scalalogging.LazyLogging
 import org.junit.runner.RunWith
-import org.scalatest.concurrent.Eventually
+import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{Matchers, OptionValues, WordSpec}
 import support.{EmailSupport, TestNetworking}
@@ -11,6 +11,7 @@ import support.{EmailSupport, TestNetworking}
 class EmailConnectorSpec extends WordSpec
   with Matchers
   with Eventually
+  with IntegrationPatience
   with OptionValues
   with EmailSupport
   with TestNetworking {
