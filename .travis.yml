@@ -3,8 +3,8 @@ services:
 env:
   - TERM=dump
 script:
-  - ls -lah "${HOME}/.ssh"
-  - ./docker/compose run --rm gradle --stacktrace clean check final docker dockerTag dockerPush
+  - docker-compose -f docker/docker-compose.yml up -d greenmail wiremock mongo-init
+  - ./gradlew --stacktrace clean check final docker dockerTag dockerPush
 cache:
   directories:
   - "$HOME/.gradle"

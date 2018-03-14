@@ -1,12 +1,12 @@
 package support
 
 trait TestNetworking {
-  val WiremockHost = "wiremock"
+  val WiremockHost = "localhost"
   val WiremockPort = 8080
 
-  val MongoHost = "mongo"
+  val MongoHost = "localhost"
   val MongoPort = 27017
 
-  val GreenmailHost = "greenmail"
+  val GreenmailHost = "localhost"
   val GreenmailPort = 3143
 }
