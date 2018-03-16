@@ -45,4 +45,4 @@ services:
       - wiremock
       - greenmail
       - mongo-init
-    entrypoint: ['./gradlew']
+    entrypoint: ["./gradlew"]

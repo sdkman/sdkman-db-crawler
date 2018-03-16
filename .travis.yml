@@ -1,9 +1,16 @@
+sudo: required
 services:
   - docker
 env:
   - TERM=dump
+jdk:
+  - openjdk8
+before_script:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 script:
-  - docker-compose -f docker/docker-compose.yml run --rm gradle --stacktrace clean check docker dockerTag dockerPush
+  - docker-compose -f docker/docker-compose.yml run --rm gradle --stacktrace check clean
+  - sudo rm -rvf ~/.gradle/wrapper/dists
+  - ./gradlew docker dockerTag dockerPush
 after_script:
   - docker-compose -f docker/docker-compose.yml down
 cache:
