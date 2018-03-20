@@ -19,7 +19,7 @@ trait MongoConnection {
     .clusterSettings(clusterSettings)
     .build()
 
-  lazy val mongoClient = if (mongoHost == "mongo") MongoClient(s"mongodb://$mongoHost:$mongoPort") else MongoClient(clientSettings)
+  lazy val mongoClient = if (mongoHost == "localhost") MongoClient(s"mongodb://$mongoHost:$mongoPort") else MongoClient(clientSettings)
 
   def db = mongoClient.getDatabase(mongoDatabase)
 

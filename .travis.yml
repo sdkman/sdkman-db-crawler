@@ -1,16 +1,14 @@
-sudo: required
 services:
   - docker
 env:
-  - TERM=dump
+  - TERM=dumb
 jdk:
   - openjdk8
 before_script:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker-compose -f docker/docker-compose.yml up -d mongo-init greenmail wiremock
 script:
-  - docker-compose -f docker/docker-compose.yml run --rm gradle --stacktrace check clean
-  - sudo rm -rvf ~/.gradle/wrapper/dists
-  - ./gradlew docker dockerTag dockerPush
+  - ./gradlew clean check docker dockerTag dockerPush
 after_script:
   - docker-compose -f docker/docker-compose.yml down
 cache:
