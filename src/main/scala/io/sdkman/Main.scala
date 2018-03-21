@@ -7,10 +7,13 @@ import com.typesafe.scalalogging.LazyLogging
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import scala.util.Try
-import scalaj.http.Http
 
-class Main extends VersionsRepo with EmailConnector with MongoConnection with Configuration with LazyLogging {
+class Main extends VersionsRepo
+  with UrlValidation
+  with EmailConnector
+  with MongoConnection
+  with Configuration
+  with LazyLogging {
 
   def run(): Unit = {
 
@@ -18,10 +21,6 @@ class Main extends VersionsRepo with EmailConnector with MongoConnection with Co
 
     logger.info("Completed scheduled email job...")
   }
-
-  private def hasOrphanedUrl(version: Version): Boolean =
-    Try(Http(version.url).method("HEAD").asString.code)
-      .fold(e => true, code => code != 200)
 }
 
 object Main extends Main with App {

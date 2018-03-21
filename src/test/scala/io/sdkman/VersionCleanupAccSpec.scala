@@ -29,7 +29,8 @@ class VersionCleanupAccSpec extends WordSpec
   }
 
   "application" should {
-    "notify of all versions with defunct urls by email" in new Main {
+
+    "notify of all versions with invalid urls by email" in new Main {
 
       val fromEmail = "from@localhost.com"
       val toEmail = randomEmail()
@@ -40,13 +41,11 @@ class VersionCleanupAccSpec extends WordSpec
 
       val validUrl = s"http://$WiremockHost:$WiremockPort/candidates/scala/2.12.4"
       val invalidUri = s"http://$WiremockHost:$WiremockPort/candidates/scala/2.9.0"
-      val invalidHostUrl = "http://invalid/candidates/scala/0.0.0"
 
       val validVersion = Version("scala", "2.12.4", "UNIVERSAL", validUrl)
       val invalidUriVersion = Version("scala", "2.9.0", "UNIVERSAL", invalidUri)
-      val invalidHostVersion = Version("scala", "0.0.0", "UNIVERSAL", invalidHostUrl)
 
-      insertVersions(validVersion, invalidUriVersion, invalidHostVersion)
+      insertVersions(validVersion, invalidUriVersion)
 
       stubFor(head(urlEqualTo("/candidates/scala/2.12.4"))
         .willReturn(aResponse()
@@ -66,7 +65,6 @@ class VersionCleanupAccSpec extends WordSpec
           message.getSubject shouldBe subject
           val content = message.getContent.asInstanceOf[String]
           content should include(invalidUri)
-          content should include(invalidHostUrl)
           content shouldNot include(validUrl)
         }
       }
