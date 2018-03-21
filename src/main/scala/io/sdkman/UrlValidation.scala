@@ -12,5 +12,5 @@ trait UrlValidation {
         .option(followRedirects(true))
         .asString
         .code
-    }.fold(e => true, code => code != 200)
+    }.fold(e => true, code => code == 404)
 }
