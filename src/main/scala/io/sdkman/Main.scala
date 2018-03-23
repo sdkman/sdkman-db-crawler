@@ -19,7 +19,8 @@ class Main extends VersionsRepo
 
   def run(): Unit = {
 
-    send(Await.result(findAllVersions(), 10 seconds).filter(hasOrphanedUrl).map(_.url), smtpToEmail)
+    val urls = Await.result(findAllVersions(), 10 seconds).filter(hasOrphanedUrl).map(_.url)
+    send(urls, smtpToEmail)
 
     logger.info("Completed scheduled email job...")
   }
@@ -32,7 +33,7 @@ object Main extends Main with App {
   import monix.execution.Scheduler.{global => scheduler}
 
   logger.info("Starting up scheduler...")
-  scheduler.scheduleAtFixedRate(1 minute, 24 hours) {
+  scheduler.scheduleAtFixedRate(10 seconds, 24 hours) {
     logger.info("Running scheduled email job...")
     run()
   }

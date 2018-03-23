@@ -5,7 +5,6 @@ env:
 jdk:
   - openjdk8
 before_script:
-  - git pull --tags
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker-compose -f docker/docker-compose.yml up -d mongo-init greenmail wiremock
 script:
