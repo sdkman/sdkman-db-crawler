@@ -26,7 +26,7 @@ trait EmailConnector {
         case Success(x) =>
           logger.info(s"Notification sent: $smtpToEmail: $urls")
         case Failure(e) =>
-          logger.error(s"Failed to send notification: $smtpToEmail: ${e.getMessage}")
+          logger.error(s"Failed to send notification: $smtpToEmail: ${e.getStackTrace.foreach(_.toString)}")
       }
     }
   }
