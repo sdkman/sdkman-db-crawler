@@ -3,6 +3,8 @@ package io.sdkman
 import java.lang.Thread.sleep
 
 import com.typesafe.scalalogging.LazyLogging
+import ratpack.handling.{Context, Handler}
+import ratpack.server.RatpackServer
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -35,6 +37,12 @@ object Main extends Main with App {
     run()
   }
 
-  logger.info("Successfully started sdkman-db-cleanup...")
-  while (true) sleep(1000)
+  logger.info("Starting up http server...")
+  RatpackServer.start(server =>
+    server.handlers(chain =>
+      chain.get("alive", new HealthCheckHandler)))
+}
+
+class HealthCheckHandler extends Handler {
+  override def handle(ctx: Context): Unit = ctx.render("OK")
 }

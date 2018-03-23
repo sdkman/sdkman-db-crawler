@@ -1,12 +1,12 @@
 plugins {
   id "com.github.johnrengelman.plugin-shadow" version "2.0.2"
   id "com.palantir.docker" version "0.19.2"
+  id "io.ratpack.ratpack-java" version "1.5.4"
 }
 
 apply plugin: "scala"
-apply plugin: "com.github.johnrengelman.plugin-shadow"
-apply plugin: "application"
 apply plugin: "com.palantir.docker"
+apply plugin: "io.ratpack.ratpack-java"
 
 mainClassName = "io.sdkman.Main"
 
