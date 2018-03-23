@@ -31,6 +31,7 @@ dependencies {
 
 shadowJar {
     relocate 'buildinfo', 'buildinfo'
+    relocate 'com.sun.mail.smtp', 'com.sun.mail.smtp'
     dependsOn check
 }
 
