@@ -17,25 +17,21 @@ trait EmailConnector {
     .as(smtpUser, smtpPassword)
     .startTtls(true)()
 
-  def send(urls: Seq[String], email: String): Unit = {
-    urls.headOption.foreach { _ =>
+  def send(versions: Seq[Version], email: String): Unit = {
+    versions.headOption.foreach { _ =>
       mailer(Envelope.from(new InternetAddress(smtpFromEmail))
         .to(new InternetAddress(email))
         .subject(s"Invalid URLs")
-        .content(Text(compose(urls)))).onComplete {
+        .content(Text(compose(versions)))).onComplete {
         case Success(x) =>
-          logger.info(s"Notification sent: $smtpToEmail: $urls")
+          logger.info(s"Notification sent: $smtpToEmail: $versions")
         case Failure(e) =>
           logger.error(s"Failed to send notification: $smtpToEmail: $e")
       }
     }
   }
 
-  private def compose(urls: Seq[String]) =
-    s"""
-      |The following URLs are invalid and marked for deletion:
-      |
-      |$urls
-    """.stripMargin
+  private def compose(urls: Seq[Version]) =
+    "The following URLs are invalid and marked for deletion:\n" + urls.map(v => s"* ${v.candidate}:${v.version} - ${v.url} (${v.platform})").mkString("\n")
 }
 

@@ -1,12 +1,10 @@
 package io.sdkman
 
-import java.lang.Thread.sleep
-
 import com.typesafe.scalalogging.LazyLogging
 import ratpack.handling.{Context, Handler}
 import ratpack.server.RatpackServer
 
-import scala.concurrent.Await
+import scala.concurrent.Await.result
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
@@ -19,8 +17,7 @@ class Main extends VersionsRepo
 
   def run(): Unit = {
 
-    val urls = Await.result(findAllVersions(), 10 seconds).filter(hasOrphanedUrl).map(_.url)
-    send(urls, smtpToEmail)
+    send(result(findAllVersions(), 10 seconds).filter(hasOrphanedUrl), smtpToEmail)
 
     logger.info("Completed scheduled email job...")
   }

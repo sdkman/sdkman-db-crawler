@@ -22,9 +22,9 @@ class EmailConnectorSpec extends WordSpec
       val fromEmail = "from@localhost.com"
       val toEmail = randomEmail()
       val subject = "Invalid URLs"
-      val url = "url text"
+      val version = Version("scala", "2.12.5", "UNIVERSAL", "http://someurl")
 
-      send(Seq(url), toEmail)
+      send(Seq(version), toEmail)
 
       withStore(toEmail) { store =>
         eventually {
@@ -35,7 +35,7 @@ class EmailConnectorSpec extends WordSpec
           message.getSubject shouldBe subject
           val content = message.getContent.asInstanceOf[String]
           content should include("The following URLs are invalid and marked for deletion")
-          content should include(content)
+          content should include("* scala:2.12.5 - http://someurl (UNIVERSAL)")
         }
       }
     }
@@ -44,11 +44,11 @@ class EmailConnectorSpec extends WordSpec
       val fromEmail = "from@localhost.com"
       val toEmail = randomEmail()
       val subject = "Invalid URLs"
-      val url = "url text"
+      val version = Version("scala", "2.12.5", "UNIVERSAL", "http://someurl")
 
       //doing two calls will not bump up the message count to 2
       send(Seq(), toEmail)
-      send(Seq(url), toEmail)
+      send(Seq(version), toEmail)
 
       withStore(toEmail) { store =>
         eventually {
@@ -59,7 +59,7 @@ class EmailConnectorSpec extends WordSpec
           message.getSubject shouldBe subject
           val content = message.getContent.asInstanceOf[String]
           content should include("The following URLs are invalid and marked for deletion")
-          content should include(content)
+          content should include("* scala:2.12.5 - http://someurl (UNIVERSAL)")
         }
       }
     }
