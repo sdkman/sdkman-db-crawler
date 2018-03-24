@@ -8,7 +8,7 @@ before_script:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker-compose -f docker/docker-compose.yml up -d mongo-init greenmail wiremock
 script:
-  - ./gradlew -Prelease.useLastTag=true final clean check docker dockerTag dockerPush
+  - ./gradlew -Prelease.useLastTag=true final docker dockerTag dockerPush
 after_script:
   - docker-compose -f docker/docker-compose.yml down
 cache:
