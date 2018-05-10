@@ -47,10 +47,10 @@ class VersionCleanupAccSpec extends WordSpec
 
       insertVersions(validVersion, invalidUriVersion)
 
-      stubFor(head(urlEqualTo("/candidates/scala/2.12.4"))
+      stubFor(get(urlEqualTo("/candidates/scala/2.12.4"))
         .willReturn(aResponse()
           .withStatus(200)))
-      stubFor(head(urlEqualTo("/candidates/scala/2.9.0"))
+      stubFor(get(urlEqualTo("/candidates/scala/2.9.0"))
         .willReturn(aResponse()
           .withStatus(404)))
 

@@ -32,6 +32,6 @@ trait EmailConnector {
   }
 
   private def compose(urls: Seq[Version]) =
-    "The following URLs are invalid and marked for deletion:\n" + urls.map(v => s"* ${v.candidate}:${v.version} - ${v.url} (${v.platform})").mkString("\n")
+    "The following URLs are invalid and should be removed:\n" + urls.map(v => s"* ${v.candidate}:${v.version} - ${v.url} (${v.platform})").mkString("\n")
 }
 

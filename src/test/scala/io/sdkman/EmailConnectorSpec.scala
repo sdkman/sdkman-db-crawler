@@ -34,7 +34,7 @@ class EmailConnectorSpec extends WordSpec
           message.getFrom.toList.headOption.value.toString shouldBe fromEmail
           message.getSubject shouldBe subject
           val content = message.getContent.asInstanceOf[String]
-          content should include("The following URLs are invalid and marked for deletion")
+          content should include("The following URLs are invalid and should be removed")
           content should include("* scala:2.12.5 - http://someurl (UNIVERSAL)")
         }
       }
@@ -58,7 +58,7 @@ class EmailConnectorSpec extends WordSpec
           message.getFrom.toList.headOption.value.toString shouldBe fromEmail
           message.getSubject shouldBe subject
           val content = message.getContent.asInstanceOf[String]
-          content should include("The following URLs are invalid and marked for deletion")
+          content should include("The following URLs are invalid and should be removed")
           content should include("* scala:2.12.5 - http://someurl (UNIVERSAL)")
         }
       }
