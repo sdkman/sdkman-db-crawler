@@ -19,8 +19,8 @@ class Main extends VersionsRepo
     send(result(findAllVersions(), 10 seconds).filter { v =>
       logger.info(s"Version: ${v.candidate}:${v.version} - ${v.url}")
       if (v.version.endsWith("oracle"))
-        resourceAvailable(v.url, Some(Cookie("oraclelicense", "accept-securebackup-cookie")))
-      else resourceAvailable(v.url)
+        !resourceAvailable(v.url, Some(Cookie("oraclelicense", "accept-securebackup-cookie")))
+      else !resourceAvailable(v.url)
     }, smtpToEmail)
 
     logger.info("Stopping sdkman-db-cleanup...")
