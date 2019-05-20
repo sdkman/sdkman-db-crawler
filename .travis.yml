@@ -12,3 +12,5 @@ cache:
 branches:
   only:
     - master
+notifications:
+  slack: sdkman:QdA1XVUuYDjlYL4Z7gm16OEc
