@@ -24,10 +24,7 @@ class Main extends VersionsRepo
     System.exit(0)
   }
 
-  private def validUrl(v: Version): Boolean =
-    if (v.version.endsWith("oracle"))
-      !resourceAvailable(v.url, Some(Cookie("oraclelicense", "accept-securebackup-cookie")))
-    else !resourceAvailable(v.url)
+  private def validUrl(v: Version): Boolean = !resourceAvailable(v.url)
 }
 
 object Main extends Main with App {
