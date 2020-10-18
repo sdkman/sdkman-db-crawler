@@ -21,7 +21,7 @@ class Main extends VersionsRepo
 
     Thread.sleep(10000L)
     logger.info("Stopping sdkman-db-cleanup...")
-    System.exit(0)
+    if(orphans.isEmpty) System.exit(0) else System.exit(1)
   }
 
   private def validUrl(v: Version): Boolean = !resourceAvailable(v.url)
