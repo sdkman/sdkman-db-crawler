@@ -20,11 +20,11 @@ trait EmailConnector {
   def send(versions: Seq[Version], email: String): Unit = {
     versions.headOption.foreach { _ =>
       mailer(Envelope.from(new InternetAddress(smtpFromEmail))
-        .to(new InternetAddress(email))
+        .to(email.split(",").map(new InternetAddress(_)): _*)
         .subject(s"Invalid URLs")
         .content(Text(compose(versions)))).onComplete {
         case Success(x) =>
-          logger.info(s"Notification sent: $smtpToEmail: $versions")
+          logger.info(s"Notification sent to: $smtpToEmail")
         case Failure(e) =>
           logger.error(s"Failed to send notification: $smtpToEmail: $e")
       }
