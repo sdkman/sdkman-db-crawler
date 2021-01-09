@@ -21,7 +21,11 @@ class Main extends VersionsRepo
 
     Thread.sleep(10000L)
     logger.info("Stopping sdkman-db-cleanup...")
-    if(orphans.isEmpty) System.exit(0) else System.exit(1)
+    if(orphans.isEmpty) System.exit(0) else {
+      logger.info("The following urls are defunct:")
+      orphans.foreach(v => logger.info(s"${v.candidate} ${v.version} (${v.platform}): ${v.url}"))
+      System.exit(1)
+    }
   }
 
   private def validUrl(v: Version): Boolean = !resourceAvailable(v.url)
