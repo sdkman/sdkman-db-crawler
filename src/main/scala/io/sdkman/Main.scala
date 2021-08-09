@@ -14,13 +14,13 @@ class Main extends VersionsRepo
   with LazyLogging {
 
   def run(): Unit = {
-    logger.info("Starting sdkman-db-cleanup...")
+    logger.info("Starting sdkman-db-crawler...")
 
     val orphans = result(findAllVersions().map(vs => vs.filter(validUrl)), 20 minutes)
     send(orphans, smtpToEmail)
 
     Thread.sleep(10000L)
-    logger.info("Stopping sdkman-db-cleanup...")
+    logger.info("Stopping sdkman-db-crawler...")
     if(orphans.isEmpty) System.exit(0) else {
       logger.info("The following urls are defunct:")
       orphans.foreach(v => logger.info(s"${v.candidate} ${v.version} (${v.platform}): ${v.url}"))
