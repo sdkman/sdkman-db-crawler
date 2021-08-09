@@ -4,8 +4,9 @@ apply plugin: "application"
 mainClassName = "io.sdkman.Main"
 
 repositories {
+    mavenCentral()
     jcenter()
-    maven { url 'https://dl.bintray.com/sdkman/maven' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
