@@ -15,7 +15,7 @@ trait EmailConnector {
   lazy val mailer = Mailer(smtpHost, smtpPort)
     .auth(true)
     .as(smtpUser, smtpPassword)
-    .startTtls(true)()
+    .startTls(true)()
 
   def send(versions: Seq[Version], email: String): Unit = {
     versions.headOption.foreach { _ =>
