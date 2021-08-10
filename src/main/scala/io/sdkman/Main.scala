@@ -16,7 +16,7 @@ class Main extends VersionsRepo
   def run(): Unit = {
     logger.info("Starting sdkman-db-crawler...")
 
-    val orphans = result(findAllVersions().map(vs => vs.filter(validUrl)), 20 minutes)
+    val orphans = result(findAllVersions().map(vs => vs.filter(invalidUrl)), 20 minutes)
     send(orphans, smtpToEmail)
 
     Thread.sleep(10000L)
@@ -28,7 +28,7 @@ class Main extends VersionsRepo
     }
   }
 
-  private def validUrl(v: Version): Boolean = !resourceAvailable(v.url)
+  private def invalidUrl(v: Version): Boolean = !resourceAvailable(v.url)
 }
 
 object Main extends Main with App {
